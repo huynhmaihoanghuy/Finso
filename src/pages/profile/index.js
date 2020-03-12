@@ -26,6 +26,8 @@ const Profile = () => {
             <br />
 
             <ProfileForm onSubmit={onSubmit} user={user} submitName="Update"/>
+
+            <br />
         </Wrapper>
     )
 }
