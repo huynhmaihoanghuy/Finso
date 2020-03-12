@@ -32,11 +32,11 @@ export const UserHeader = () => {
 
     return (
         <>
-            <NavDropdown title={user.name} id="basic-nav-dropdown">
+            <NavDropdownStyle title={user.name} id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={gotoProfile}>Profile</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdownStyle>
         </>
     )
 }
@@ -44,4 +44,11 @@ export const UserHeader = () => {
 const RegisterLink = styled(Link) `
     cursor: pointer;
     color: #007bff;
+    padding: 0;
 `;
+
+const NavDropdownStyle = styled(NavDropdown) `
+    > a {
+        padding: 0;
+    }
+`
