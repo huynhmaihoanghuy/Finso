@@ -1,31 +1,35 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import { NewsItem } from '../../components/news/NewsItem';
 import axios from 'axios';
 import { API_URL, API_KEY } from '../../enviroment';
-import { CardDeck, CardColumns, Card, Alert } from 'react-bootstrap';
+import { CardColumns, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { setTopHeadlines, setTopHeadlinesLoading } from '../../store/actions/topHeadLine';
+import { setTopHeadlines, setTopHeadlinesLoading, setTopHeadlinesKeyword } from '../../store/actions/topHeadLine';
 import { NewsDetail } from '../../components/news/NewsDetail';
 import { NewsDetailContext } from '../../components/news/NewsDetail';
 import { NewsFilter } from '../../components/news/NewsFilter';
 
 const KEYWORDS_FILTER = [
-  {
-      value: 'bitcoin',
-      label: 'Bitcoin'
-  },
-  {
-      value: 'apple',
-      label: 'Apple'
-  },
-  {
-      value: 'earthquake',
-      label: 'Earthquake'
-  },
-  {
-      value: 'animal',
-      label: 'Animal'
-  }
+    {
+        value: null,
+        label: '- NONE -'
+    },
+    {
+        value: 'bitcoin',
+        label: 'Bitcoin'
+    },
+    {
+        value: 'apple',
+        label: 'Apple'
+    },
+    {
+        value: 'earthquake',
+        label: 'Earthquake'
+    },
+    {
+        value: 'animal',
+        label: 'Animal'
+    }
 ]
 
 class Home extends Component {
@@ -43,9 +47,7 @@ class Home extends Component {
 
     componentDidMount() {
         const { keyword } = this.props.topHeadlines;
-        let url = `${API_URL}/everything?q=apple&apiKey=${API_KEY}`
-        if (keyword && keyword.value)
-            url = `${API_URL}/everything?q=${keyword.value}&apiKey=${API_KEY}`;
+        let url = `${API_URL}/everything?q=null&apiKey=${API_KEY}`
 
         axios.get(url).then(res => {
             const data = res.data;
@@ -70,12 +72,16 @@ class Home extends Component {
         })
     }
 
+    componentWillUnmount() {
+        this.props.setTopHeadlinesKeyword();
+    }
+
     render() {
         const { list, isLoading } = this.props.topHeadlines;
 
         return (
-            <section style={{marginTop: '30px'}}>
-                <NewsFilter options={ this.state.options }/>
+            <section style={{ marginTop: '30px' }}>
+                <NewsFilter options={this.state.options} url="everything" params={[]} />
 
                 {
                     isLoading && <div>Loading...</div>
@@ -84,7 +90,7 @@ class Home extends Component {
                 {
                     !isLoading && !list.length && <Alert variant="warning"> Empty </Alert>
                 }
-                
+
                 <CardColumns>
                     {
                         !isLoading && list.map(article => (
@@ -92,7 +98,7 @@ class Home extends Component {
                         ))
                     }
                 </CardColumns>
-                
+
                 <NewsDetailContext.Provider value={{ article: this.state.article, onClose: this.closeNewsDetail }}>
                     <NewsDetail />
                 </NewsDetailContext.Provider>
@@ -107,5 +113,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
     setTopHeadlines,
-    setTopHeadlinesLoading
+    setTopHeadlinesLoading,
+    setTopHeadlinesKeyword
 })(Home)

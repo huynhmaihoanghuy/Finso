@@ -93,9 +93,3 @@ const ArticleAuthorSection = styled.section `
         text-decoration: none;
     }
 `;
-
-// const ArticleAuthor = styled.div `
-//     margin: 0 0 30px;
-//     color: #8a8a8a;
-// `;
-

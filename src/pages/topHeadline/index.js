@@ -1,10 +1,10 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import { NewsItem } from '../../components/news/NewsItem';
 import axios from 'axios';
 import { API_URL, API_KEY } from '../../enviroment';
-import { CardDeck, CardColumns, Card, Alert } from 'react-bootstrap';
+import { CardColumns, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { setTopHeadlines, setTopHeadlinesLoading } from '../../store/actions/topHeadLine';
+import { setTopHeadlines, setTopHeadlinesLoading, setTopHeadlinesKeyword } from '../../store/actions/topHeadLine';
 import { NewsDetail } from '../../components/news/NewsDetail';
 import { NewsDetailContext } from '../../components/news/NewsDetail';
 import { NewsFilter } from '../../components/news/NewsFilter';
@@ -46,11 +46,7 @@ class TopHeadline extends Component {
     }
 
     componentDidMount() {
-        const { keyword } = this.props.topHeadlines;
-        let url = `${API_URL}/top-headlines?country=us&apiKey=${API_KEY}`
-        if (keyword && keyword.value)
-            url = `${API_URL}/top-headlines?country=us&q=${keyword.value}&apiKey=${API_KEY}`;
-
+        let url = `${API_URL}/top-headlines?country=us&apiKey=${API_KEY}`;
         axios.get(url).then(res => {
             const data = res.data;
             const { status, articles } = data;
@@ -74,12 +70,16 @@ class TopHeadline extends Component {
         })
     }
 
+    componentWillUnmount() {
+        this.props.setTopHeadlinesKeyword();
+    }
+
     render() {
         const { list, isLoading } = this.props.topHeadlines;
 
         return (
             <section style={{marginTop: '30px'}}>
-                <NewsFilter options={this.state.options}/>
+                <NewsFilter options={this.state.options} url="top-headlines" params={['country=us']}/>
 
                 {
                     isLoading && <div>Loading...</div>
@@ -111,5 +111,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
     setTopHeadlines,
-    setTopHeadlinesLoading
+    setTopHeadlinesLoading,
+    setTopHeadlinesKeyword
 })(TopHeadline)
