@@ -9,12 +9,32 @@ import { NewsDetail } from '../../components/news/NewsDetail';
 import { NewsDetailContext } from '../../components/news/NewsDetail';
 import { NewsFilter } from '../../components/news/NewsFilter';
 
+const KEYWORDS_FILTER = [
+  {
+      value: 'bitcoin',
+      label: 'Bitcoin'
+  },
+  {
+      value: 'apple',
+      label: 'Apple'
+  },
+  {
+      value: 'earthquake',
+      label: 'Earthquake'
+  },
+  {
+      value: 'animal',
+      label: 'Animal'
+  }
+]
+
 class Home extends Component {
     constructor() {
         super();
 
         this.state = {
-            article: null
+            article: null,
+            options: KEYWORDS_FILTER
         }
 
         this.openNewsDetail = this.openNewsDetail.bind(this);
@@ -55,7 +75,7 @@ class Home extends Component {
 
         return (
             <section style={{marginTop: '30px'}}>
-                <NewsFilter />
+                <NewsFilter options={ this.state.options }/>
 
                 {
                     isLoading && <div>Loading...</div>
