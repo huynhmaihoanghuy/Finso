@@ -11,3 +11,8 @@ export const setTopHeadlinesLoading = (isLoading = false) => ({
     type: SET_TOP_HEADLINES_LOADING,
     payload: isLoading
 })
+
+export const setTopHeadlinesKeyword = (keyword = null) => ({
+    type: SET_TOP_HEADLINES_KEYWORD,
+    payload: keyword
+})
